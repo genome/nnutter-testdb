@@ -4,9 +4,9 @@
   "author": "nnutter",
   "summary": null,
   "license": "Apache 2.0",
-  "source": "",
-  "project_page": null,
-  "issues_url": null,
+  "source": "https://github.com/nnutter/nnutter-testdb",
+  "project_page": "https://github.com/nnutter/nnutter-testdb",
+  "issues_url": "https://github.com/nnutter/nnutter-testdb/issues",
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
     {"name":"nnutter-perlbrew","version_requirement":">= 0.1.2"}
