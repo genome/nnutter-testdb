@@ -1,0 +1,13 @@
+[core]
+    engine = pg
+[core "pg"]
+    db_name = <%= @db_name %>
+    port = <%= @db_port %>
+    host = <%= @db_host %>
+    sqitch_schema = sqitch
+    username = <%= @user %>
+    password = <%= @db_admin_password %>
+[deploy]
+    verify = true
+[rebase]
+    verify = true

@@ -23,7 +23,7 @@
 #
 # === Examples
 #
-#  class { 'testdb':
+#  class { testdb:
 #    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
 #  }
 #
@@ -36,6 +36,41 @@
 # Copyright 2014 Your name here, unless otherwise noted.
 #
 class testdb {
+  include perlbrew
+  include testdb::params
 
+  $perl_version = '5.20.1'
+  $user = 'test_db'
+  $home = "/home/${user}"
+  $dir = "${home}/TestDbServer"
 
+  $revision          = $testdb::params::revision
+  $db_admin_password = $testdb::params::db_admin_password
+  $fq_hostname       = $testdb::params::fq_hostname
+  $redirect          = $testdb::params::redirect
+
+  user { $user :
+    ensure     => present,
+    shell      => '/bin/bash',
+    home       => "/home/${user}",
+    managehome => true,
+  }
+
+  class { 'testdb::app':
+    perl_version      => $perl_version,
+    dir               => $dir,
+    user              => $user,
+    revision          => $revision,
+    db_admin_password => $db_admin_password,
+    require           => User[$user],
+  }
+
+  class { 'testdb::http':
+    fq_hostname => $fq_hostname,
+    redirect    => $redirect,
+  }
+
+  anchor { 'testdb::end':
+    require => Class['testdb::app', 'testdb::http'],
+  }
 }

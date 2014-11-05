@@ -1,0 +1,29 @@
+# test-db - Test DB Service
+#
+# TestDbServer provides ephemeral testing databases to developers.
+
+description     "Test DB Service"
+
+start on filesystem
+stop on runlevel [!2345]
+
+respawn
+respawn limit 10 5
+umask 022
+oom never
+
+setuid <%= scope.lookupvar('testdb::user') %>
+
+env MOJO_MODE=production
+env MOJO_REVERSE_PROXY=1
+env PERLBREW_ROOT="<%= scope.lookupvar('perlbrew::perlbrew_root') %>"
+env PERLBREW_PATH="<%= scope.lookupvar('perlbrew::perlbrew_root') %>/bin:<%= scope.lookupvar('perlbrew::perlbrew_root') %>/perls/perl-<%= scope.lookupvar('testdb::perl_version') %>/bin"
+env PERL5LIB="<%= scope.lookupvar('testdb::dir') %>/lib:<%= scope.lookupvar('testdb::dir') %>/local/lib/perl5"
+
+script
+    export PATH="${PERLBREW_PATH}:${PATH}"
+    export PATH="<%= scope.lookupvar('testdb::dir') %>/local/bin:$PATH"
+    export PATH="<%= scope.lookupvar('testdb::dir') %>/bin:$PATH"
+    cd "<%= scope.lookupvar('testdb::dir') %>"
+    perlbrew exec --with <%= scope.lookupvar('testdb::perl_version') %> carton exec -- perl ./bin/test_db_server.pl daemon
+end script
