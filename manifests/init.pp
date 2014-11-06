@@ -35,25 +35,39 @@
 #
 # Copyright 2014 Your name here, unless otherwise noted.
 #
-class testdb {
+class testdb (
+  $perl_version      = '5.20.1',
+  $service_user      = undef,
+  $deploy_dir        = undef,
+  $revision          = $testdb::params::revision,
+  $db_admin_password = $testdb::params::db_admin_password,
+  $fq_hostname       = $testdb::params::fq_hostname,
+  $redirect          = $testdb::params::redirect,
+  $source            = $testdb::params::source,
+  $ssl               = $testdb::params::ssl,
+  $ssl_key           = 'none',
+  $ssl_cert          = 'none',
+) inherits testdb::params {
   include perlbrew
-  include testdb::params
 
-  $perl_version = '5.20.1'
-  $user = 'test_db'
-  $home = "/home/${user}"
-  $dir = "${home}/TestDbServer"
+  anchor { 'testdb::begin':
+    before => Class['testdb::app', 'testdb::http'],
+  }
 
-  $revision          = $testdb::params::revision
-  $db_admin_password = $testdb::params::db_admin_password
-  $fq_hostname       = $testdb::params::fq_hostname
-  $redirect          = $testdb::params::redirect
-
-  user { $user :
-    ensure     => present,
-    shell      => '/bin/bash',
-    home       => "/home/${user}",
-    managehome => true,
+  if $service_user {
+    $user = $service_user
+  }
+  else {
+    $user = 'test_db'
+    $home = "/home/${user}"
+    $dir = "${home}/TestDbServer"
+    user { $user :
+      ensure     => present,
+      shell      => '/bin/bash',
+      home       => $home,
+      managehome => true,
+      before     => Class['testdb::app'],
+    }
   }
 
   class { 'testdb::app':
@@ -62,12 +76,15 @@ class testdb {
     user              => $user,
     revision          => $revision,
     db_admin_password => $db_admin_password,
-    require           => User[$user],
+    source            => $source,
   }
 
   class { 'testdb::http':
     fq_hostname => $fq_hostname,
     redirect    => $redirect,
+    ssl         => $ssl,
+    ssl_key     => $ssl_key,
+    ssl_cert    => $ssl_cert,
   }
 
   anchor { 'testdb::end':

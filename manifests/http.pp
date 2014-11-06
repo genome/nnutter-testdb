@@ -2,11 +2,12 @@
 
 class testdb::http(
   $fq_hostname,
-  $redirect = 'true',
+  $redirect,
+  $ssl,
+  $ssl_key,
+  $ssl_cert,
 ) {
-  include testdb::params
   include apache
-  #include wildcard_gsc_wustl_edu
 
   $docroot = '/var/www'
 
@@ -32,14 +33,15 @@ class testdb::http(
     }
   }
 
-  #apache::vhost { "${fq_hostname}-ssl":
-  #  servername => $fq_hostname,
-  #  port       => '443',
-  #  ssl        => true,
-  #  docroot    => $docroot,
-  #  proxy_dest => 'http://localhost:3000',
-  #  ssl_key    => $wildcard_gsc_wustl_edu::key_path,
-  #  ssl_cert   => $wildcard_gsc_wustl_edu::cert_path,
-  #  require    => Class['wildcard_gsc_wustl_edu'],
-  #}
+  if str2bool($ssl) {
+    apache::vhost { "${fq_hostname}-ssl":
+      servername => $fq_hostname,
+      port       => '443',
+      ssl        => true,
+      docroot    => $docroot,
+      proxy_dest => 'http://localhost:3000',
+      ssl_key    => $ssl_key,
+      ssl_cert   => $ssl_cert,
+    }
+  }
 }

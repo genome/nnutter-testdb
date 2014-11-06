@@ -1,11 +1,14 @@
 class testdb::app(
-  $perl_version = '5.20.1',
+  $perl_version,
   $dir,
   $user,
   $revision,
   $db_admin_password,
+  $source,
 ) {
-  include testdb::params
+  anchor { 'testdb::app::begin':
+    before => Class['postgresql::server', 'postgresql::lib::devel'],
+  }
 
   package { 'git':
     ensure => present,
@@ -14,7 +17,7 @@ class testdb::app(
   vcsrepo { $dir :
     ensure   => present,
     provider => git,
-    source   => 'https://github.com/genome/TestDbServer.git',
+    source   => $source,
     revision => $revision,
     require  => Package['git'],
   }
@@ -54,8 +57,6 @@ class testdb::app(
   }
   include 'postgresql::lib::devel'
 
-  include testdb::params
-
   $db_name = 'test_db'
   $db_port = 5432
   $db_host = 'localhost'
@@ -80,15 +81,6 @@ class testdb::app(
     user        => $user,
     address     => '::1/128',
     auth_method => 'trust',
-    order       => '099',
-  }
-
-  postgresql::server::pg_hba_rule { "genome-remote-access" :
-    type        => 'host',
-    database    => 'all',
-    user        => 'genome',
-    address     => '0.0.0.0/0',
-    auth_method => 'md5',
     order       => '099',
   }
 
@@ -153,6 +145,6 @@ class testdb::app(
   }
 
   anchor { 'testdb::app::end':
-    before => Class['postgresql::server', 'postgresql::lib::devel'],
+    require => Class['postgresql::server', 'postgresql::lib::devel'],
   }
 }
