@@ -1,7 +1,9 @@
 {
-db_connect_string => 'dbi:Pg:dbname=<%= @db_name %>;port=<%= @db_port %>;host=<%= @db_host %>',
-    db_user           => '<%= @user %>',
-    db_password       => '<%= @db_admin_password %>',
-    db_port           => <%= @db_port %>,
-    db_host           => '<%= @db_host %>',
+    db_connect_string     => 'dbi:Pg:dbname=<%= @db_name %>;port=<%= @db_port %>;host=<%= @db_host %>',
+    db_user               => '<%= @user %>',
+    db_password           => '<%= @db_admin_password %>',
+    db_port               => <%= @db_port %>,
+    db_host               => '<%= @db_host %>',
+    default_template_name => '<%= @default_template_name %>',
+    external_hostname     => '<%= @external_hostname %>',
 }
