@@ -36,17 +36,18 @@
 # Copyright 2014 Your name here, unless otherwise noted.
 #
 class testdb (
-  $perl_version      = '5.20.1',
-  $service_user      = undef,
-  $deploy_dir        = undef,
-  $revision          = $testdb::params::revision,
-  $db_admin_password = $testdb::params::db_admin_password,
-  $fq_hostname       = $testdb::params::fq_hostname,
-  $redirect          = $testdb::params::redirect,
-  $source            = $testdb::params::source,
-  $ssl               = $testdb::params::ssl,
-  $ssl_key           = 'none',
-  $ssl_cert          = 'none',
+  $perl_version          = '5.20.1',
+  $service_user          = undef,
+  $deploy_dir            = undef,
+  $revision              = $testdb::params::revision,
+  $db_admin_password     = $testdb::params::db_admin_password,
+  $fq_hostname           = $testdb::params::fq_hostname,
+  $redirect              = $testdb::params::redirect,
+  $source                = $testdb::params::source,
+  $ssl                   = $testdb::params::ssl,
+  $ssl_key               = 'none',
+  $ssl_cert              = 'none',
+  $default_template_name = 'template1',
 ) inherits testdb::params {
   include perlbrew
 
@@ -71,12 +72,14 @@ class testdb (
   }
 
   class { 'testdb::app':
-    perl_version      => $perl_version,
-    dir               => $dir,
-    user              => $user,
-    revision          => $revision,
-    db_admin_password => $db_admin_password,
-    source            => $source,
+    perl_version          => $perl_version,
+    dir                   => $dir,
+    user                  => $user,
+    revision              => $revision,
+    db_admin_password     => $db_admin_password,
+    source                => $source,
+    external_hostname     => $fq_hostname,
+    default_template_name => $default_template_name,
   }
 
   class { 'testdb::http':

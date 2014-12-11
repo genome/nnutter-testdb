@@ -6,7 +6,7 @@ class testdb::app(
   $db_admin_password,
   $source,
   $external_hostname,
-  $default_template_name = 'template1',
+  $default_template_name,
 ) {
   anchor { 'testdb::app::begin':
     before => Class['postgresql::server', 'postgresql::lib::devel'],
