@@ -7,7 +7,9 @@ class testdb::http(
   $ssl_key,
   $ssl_cert,
 ) {
-  include apache
+  class { 'apache' :
+    default_vhost => false,
+  }
 
   $docroot = '/var/www'
 
