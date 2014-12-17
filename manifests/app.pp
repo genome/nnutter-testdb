@@ -117,7 +117,7 @@ class testdb::app(
     perl_version => $perl_version,
     cwd          => "${dir}/sqitch",
     command      => 'carton exec -- sqitch deploy',
-    unless       => "carton exec -- sqitch status | /usr/bin/tail -n 1 | /bin/grep -q 'Nothing to deploy'",
+    unless       => "carton exec -- sqitch status | /bin/grep -q 'Nothing to deploy'",
     require      => [
       File["${dir}/sqitch/sqitch.conf"],
       Perlbrew::Carton['TestDbServer'],
