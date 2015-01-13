@@ -13,5 +13,12 @@ describe 'testdb class' do
     it 'should re-apply without changes' do
       apply_manifest_on hosts, manifest, :catch_changes => true
     end
+
+    it 'default host should respond' do
+        shell("curl 'http://localhost'") do |result|
+            expect(result.stdout).to match(/database_count/)
+            expect(result.stdout).to match(/template_count/)
+        end
+    end
   end
 end
