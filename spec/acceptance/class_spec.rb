@@ -3,9 +3,7 @@ require 'spec_helper_acceptance'
 describe 'testdb class' do
   context 'default parameters' do
     manifest = <<-EOS
-      file { '/tmp/nnutter':
-        ensure => file,
-      }
+      class { 'testdb': }
     EOS
 
     it 'should apply without failure' do
