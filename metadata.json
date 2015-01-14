@@ -4,9 +4,9 @@
   "author": "nnutter",
   "summary": "deploy TestDbServer",
   "license": "Apache 2.0",
-  "source": "https://github.com/nnutter/nnutter-testdb",
-  "project_page": "https://github.com/nnutter/nnutter-testdb",
-  "issues_url": "https://github.com/nnutter/nnutter-testdb/issues",
+  "source": "https://github.com/genome/nnutter-testdb",
+  "project_page": "https://github.com/genome/nnutter-testdb",
+  "issues_url": "https://github.com/genome/nnutter-testdb/issues",
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
     {"name":"puppetlabs-apache"},
